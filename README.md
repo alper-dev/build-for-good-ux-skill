@@ -6,6 +6,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/agent--skill-SKILL.md-00ADD8?style=flat-square" alt="Agent Skill">
   <img src="https://img.shields.io/badge/license-Apache%202.0-green?style=flat-square" alt="License">
+  <img src="https://img.shields.io/github/stars/alper-dev/build-for-good-ux-skill?style=flat-square&color=yellow" alt="Stars">
 </p>
 
 ---
@@ -35,6 +36,8 @@ yarn skills add alper-dev/build-for-good-ux-skill
 # bun
 bunx skills add alper-dev/build-for-good-ux-skill
 ```
+
+If you find this useful, consider giving it a star. It helps others discover it.
 
 ## License
 
