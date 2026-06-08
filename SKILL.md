@@ -1,8 +1,11 @@
+---
+name: build-for-good-ux
+description: Use this skill when building any UI, frontend component, page, form, or user-facing feature. Ensures every screen handles all states (loading, success, error, empty, partial) with proper UX patterns. Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, or any user-facing interface work.
+---
+
 # Build For Good UX
 
 > Based on the "Build For Good UX" video series by **Katherine Gilligan** ([@synsation_](https://instagram.com/synsation_) on Instagram). All UX principles and patterns in this skill are derived from her publicly available, free Instagram posts, not from any paid course material.
-
-Use this skill when building any UI, frontend component, page, form, or user-facing feature. Ensures every screen handles all states (loading, success, error, empty, partial) with proper UX patterns. Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, or any user-facing interface work.
 
 ## Core Principle
 
