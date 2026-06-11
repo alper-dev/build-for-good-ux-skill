@@ -115,7 +115,27 @@ Empty states are often the **first thing a new user sees**. Make a good impressi
 
 ---
 
-## 4. Forms
+## 4. Success States
+
+Success states are taken for granted when present, but very noticeable when missing. When a user completes an action, they need to know it worked.
+
+### Rules
+
+- **Always give feedback.** Button clicked, payment submitted, photo liked, the user must know it succeeded.
+- **Match the response to the action.** A like is instant and subtle. A payment is important and needs clear confirmation.
+- **Do not overdo it.** Not every success needs confetti or a full-page celebration. Use big celebrations for milestones (first project, completed task), not for every button click.
+- **Sometimes the action itself is the confirmation.** Moving a card from "to do" to "done" on a board, it stays in "done". The state change is the feedback. No extra message needed.
+- **Never leave the user guessing.** "I clicked confirm and nothing happened" is one of the worst feelings. Did it work? Should I click again? Always close the loop.
+
+### What NOT to Do
+
+- Do not show nothing after a critical action (payment, submission, booking).
+- Do not over-celebrate trivial actions (toggling a setting, liking a post).
+- Do not use a full-page success screen for something that could be a subtle inline confirmation.
+
+---
+
+## 5. Forms
 
 Nobody likes filling out forms. Reduce friction with these rules:
 
@@ -128,7 +148,7 @@ Nobody likes filling out forms. Reduce friction with these rules:
 
 ---
 
-## 5. Partial Loading / Graceful Degradation
+## 6. Partial Loading / Graceful Degradation
 
 Different parts of a page load at different speeds. They come from different servers, different APIs.
 
@@ -162,7 +182,7 @@ Each section:
 
 ---
 
-## 6. General UX Rules for AI-Generated Code
+## 7. General UX Rules for AI-Generated Code
 
 When building with AI tools or generating code, explicitly request:
 

@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">Build For Good UX</h1>
-  <p align="center">An agent skill for building UIs with proper loading states, spinner timing, error handling and placement, empty states, form UX, and graceful degradation.</p>
+  <p align="center">An agent skill for building UIs with proper loading states, spinner timing, error handling and placement, success states, empty states, form UX, and graceful degradation.</p>
 </p>
 
 <p align="center">
@@ -20,6 +20,7 @@ Based on the **Build For Good UX** video series by [Katherine Gilligan](https://
 | ⬜ | **Loading States** | Skeleton screens, progress bars, spinners, optimistic UI |
 | ⏳ | **Spinner Timing** | When to show what based on duration (<1s, 1-10s, >10s) |
 | ⚠️ | **Error States** | Message quality, placement (inline, toast, modal) |
+| ✅ | **Success States** | Action feedback, celebrations, subtle confirmations |
 | 🌵 | **Empty States** | First impressions, search results, goal/achievement states |
 | 📄 | **Form UX** | Inline validation, pre-filling, character counts, forgiving formats |
 | 🧩 | **Graceful Degradation** | Independent sections, cached content, partial loading |
