@@ -182,7 +182,29 @@ Each section:
 
 ---
 
-## 7. General UX Rules for AI-Generated Code
+## 8. Jacob's Law (Familiarity)
+
+Users spend most of their time on other websites and apps. They already expect your site to work the same as others. Predictable structure lets users focus on what actually matters, not on figuring out where things are.
+
+### Rules
+
+- **Standardize placement of common components.** Shopping cart goes top right. Navigation goes top or left. Search is usually top center or top right. Do not reinvent these patterns.
+- **Being "innovative" with standard placements creates unnecessary friction.** Moving the cart to the bottom left might feel creative, but the user now has to think about where it is. That microsecond of confusion is avoidable.
+- **Predictable does not mean boring.** The layout and structure can be familiar while the visual design is unique. Let the user focus on your product, not on finding the cart.
+- **When in doubt, follow the pattern.** If every major app does something a certain way, there is a reason. Users have built habits around those patterns.
+
+### What to Standardize vs. Where to Be Creative
+
+| Standardize (zero friction) | Creative freedom |
+|---|---|
+| Navigation placement | Visual design, colors, typography |
+| Cart/checkout flow | Content, copy, imagery |
+| Form layouts | Animations, transitions |
+| Search placement | Feature-specific interactions |
+
+---
+
+## 9. General UX Rules for AI-Generated Code
 
 When building with AI tools or generating code, explicitly request:
 
@@ -212,3 +234,4 @@ Before shipping any screen, verify:
 - [ ] Partial loading: sections load independently, failures are isolated
 - [ ] Spinner timing: no spinner for <1s, text after 5s, progress bar after 10s
 - [ ] Error placement: inline for forms/toasts for minor/modal for critical
+- [ ] Jacob's Law: standard placement for common components, no reinventing patterns
