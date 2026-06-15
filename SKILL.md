@@ -1,6 +1,7 @@
 ---
 name: build-for-good-ux
-description: Use this skill when building any UI, frontend component, page, form, or user-facing feature. Ensures every screen handles all states (loading, success, error, empty, partial) with proper UX patterns. Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, or any user-facing interface work.
+description: Use this skill when building any UI, frontend component, page, form, or user-facing feature. Ensures every screen handles all states (loading, success, error, empty, partial) with proper UX patterns.
+when_to_use: Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, skeleton screens, spinners, toast messages, empty states, success confirmations, partial loading, graceful degradation, or any user-facing interface work. Also triggers when the user asks about UX best practices, how to handle loading/error/empty states, or what makes a good user experience.
 ---
 
 # Build For Good UX
