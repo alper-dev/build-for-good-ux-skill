@@ -183,7 +183,7 @@ Each section:
 
 ---
 
-## 8. Jacob's Law (Familiarity)
+## 8. Jakob's Law (Familiarity)
 
 Users spend most of their time on other websites and apps. They already expect your site to work the same as others. Predictable structure lets users focus on what actually matters, not on figuring out where things are.
 
@@ -235,4 +235,4 @@ Before shipping any screen, verify:
 - [ ] Partial loading: sections load independently, failures are isolated
 - [ ] Spinner timing: no spinner for <1s, text after 5s, progress bar after 10s
 - [ ] Error placement: inline for forms/toasts for minor/modal for critical
-- [ ] Jacob's Law: standard placement for common components, no reinventing patterns
+- [ ] Jakob's Law: standard placement for common components, no reinventing patterns

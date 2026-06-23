@@ -24,7 +24,7 @@ Based on the **Build For Good UX** video series by [Katherine Gilligan](https://
 | 🌵 | **Empty States** | First impressions, search results, goal/achievement states |
 | 📄 | **Form UX** | Inline validation, pre-filling, character counts, forgiving formats |
 | 🧩 | **Graceful Degradation** | Independent sections, cached content, partial loading |
-| 🧭 | **Jacob's Law** | Familiar patterns, standard placement, zero friction on common actions |
+| 🧭 | **Jakob's Law** | Familiar patterns, standard placement, zero friction on common actions |
 
 ## Installation
 
