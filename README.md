@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">Build For Good UX</h1>
-  <p align="center">An agent skill for building UIs with proper loading states, spinner timing, error handling and placement, success states, empty states, form UX, graceful degradation, and familiar patterns.</p>
+  <p align="center">An agent skill for building UIs with proper loading states, spinner timing, error handling and placement, success states, empty states, form UX, graceful degradation, familiar patterns, and manageable choices.</p>
 </p>
 
 <p align="center">
@@ -24,7 +24,8 @@ Based on the **Build For Good UX** video series by [Katherine Gilligan](https://
 | 🌵 | **Empty States** | First impressions, search results, goal/achievement states |
 | 📄 | **Form UX** | Inline validation, pre-filling, character counts, forgiving formats |
 | 🧩 | **Graceful Degradation** | Independent sections, cached content, partial loading |
-| 🧭 | **Jakob's Law** | Familiar patterns, standard placement, zero friction on common actions |
+| 🧭 | **Jakob's Law** | Familiar patterns by device and locale, zero friction on common actions |
+| 🫙 | **Hick's Law** | Reduce decision complexity, break up long forms, curate choices |
 
 ## Installation
 

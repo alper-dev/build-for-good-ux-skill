@@ -1,7 +1,7 @@
 ---
 name: build-for-good-ux
-description: Use this skill when building any UI, frontend component, page, form, or user-facing feature. Ensures every screen handles all states (loading, success, error, empty, partial) with proper UX patterns.
-when_to_use: Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, skeleton screens, spinners, toast messages, empty states, success confirmations, partial loading, graceful degradation, or any user-facing interface work. Also triggers when the user asks about UX best practices, how to handle loading/error/empty states, or what makes a good user experience.
+description: Use when building any UI, frontend component, page, form, or user-facing feature, especially screens needing state handling, familiar patterns, or decision complexity.
+when_to_use: Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, skeleton screens, spinners, toast messages, empty states, success confirmations, partial loading, graceful degradation, familiar layouts, choice overload, or any user-facing interface work. Also triggers when the user asks about UX best practices, how to handle loading/error/empty states, or what makes a good user experience.
 ---
 
 # Build For Good UX
@@ -189,10 +189,10 @@ Users spend most of their time on other websites and apps. They already expect y
 
 ### Rules
 
-- **Standardize placement of common components.** Shopping cart goes top right. Navigation goes top or left. Search is usually top center or top right. Do not reinvent these patterns.
+- **Standardize placement of common components for the user's context.** On desktop web, shopping carts often go top right. On mobile, important actions often move near the bottom because thumbs reach there more easily. In right-to-left locales, layouts may mirror, so carts can appear top left.
 - **Being "innovative" with standard placements creates unnecessary friction.** Moving the cart to the bottom left might feel creative, but the user now has to think about where it is. That microsecond of confusion is avoidable.
 - **Predictable does not mean boring.** The layout and structure can be familiar while the visual design is unique. Let the user focus on your product, not on finding the cart.
-- **When in doubt, follow the pattern.** If every major app does something a certain way, there is a reason. Users have built habits around those patterns.
+- **When in doubt, follow the pattern for that device, locale, and audience.** If every major app in the user's context does something a certain way, there is a reason. Users have built habits around those patterns.
 
 ### What to Standardize vs. Where to Be Creative
 
@@ -205,7 +205,28 @@ Users spend most of their time on other websites and apps. They already expect y
 
 ---
 
-## 9. General UX Rules for AI-Generated Code
+## 9. Hick's Law (Choice Complexity)
+
+Decision time increases as the number and complexity of choices increase. Users can do more when choices are organized into manageable groups instead of shown all at once.
+
+### Rules
+
+- **Prioritize one clear primary action.** Google focuses attention on search. Yahoo-style clutter creates competing choices and slows users down.
+- **Break up long forms.** If a form has more than seven fields, consider a multi-step flow so users focus on one manageable group at a time.
+- **Curate before showing everything.** Do not list every menu item, product, movie, or filter at once. Show useful defaults, recommendations, or categories first.
+- **Let users narrow choices.** Search, filters, categories, and progressive disclosure keep options available without overwhelming the first screen.
+- **Do not remove power, reduce overload.** The goal is not to limit what users can do. The goal is to keep visible choices manageable.
+
+### What NOT to Do
+
+- Do not show every possible option on the first screen.
+- Do not make secondary actions compete visually with the primary action.
+- Do not present a long form as one dense wall when steps or sections would reduce friction.
+- Do not hide necessary options so deeply that users cannot recover them.
+
+---
+
+## 10. General UX Rules for AI-Generated Code
 
 When building with AI tools or generating code, explicitly request:
 
@@ -219,6 +240,8 @@ When building with AI tools or generating code, explicitly request:
 8. **Pre-filling** user data where possible.
 9. **Forgiving input formats**, normalize on the backend, not the user.
 10. **Accessible error placement**, errors close to the element, not at the top of the page.
+11. **Familiar placement by context**, adapting common patterns for desktop, mobile, locale, and audience.
+12. **Manageable choices**, reducing choice overload through grouping, curation, filtering, and progressive disclosure.
 
 ---
 
@@ -235,4 +258,5 @@ Before shipping any screen, verify:
 - [ ] Partial loading: sections load independently, failures are isolated
 - [ ] Spinner timing: no spinner for <1s, text after 5s, progress bar after 10s
 - [ ] Error placement: inline for forms/toasts for minor/modal for critical
-- [ ] Jakob's Law: standard placement for common components, no reinventing patterns
+- [ ] Jakob's Law: standard placement for common components by device, locale, and audience
+- [ ] Hick's Law: primary action is clear, choices are grouped/curated, long forms are split when needed
