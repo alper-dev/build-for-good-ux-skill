@@ -1,262 +1,351 @@
 ---
 name: build-for-good-ux
-description: Use when building any UI, frontend component, page, form, or user-facing feature, especially screens needing state handling, familiar patterns, or decision complexity.
-when_to_use: Triggers on requests involving UI development, component creation, page design, form building, error handling, loading states, skeleton screens, spinners, toast messages, empty states, success confirmations, partial loading, graceful degradation, familiar layouts, choice overload, or any user-facing interface work. Also triggers when the user asks about UX best practices, how to handle loading/error/empty states, or what makes a good user experience.
+description: Use when building, reviewing, or improving user-facing UI, frontend components, pages, forms, flows, loading states, error handling, empty states, success feedback, graceful degradation, familiar layouts, or choice-heavy interfaces.
 ---
 
 # Build For Good UX
 
-> Based on the "Build For Good UX" video series by **Katherine Gilligan** ([@synsation_](https://instagram.com/synsation_) on Instagram). All UX principles and patterns in this skill are derived from her publicly available, free Instagram posts, not from any paid course material.
+Based on Katherine Gilligan's public "Build For Good UX" series ([@synsation_](https://instagram.com/synsation_)). Use this as an implementation checklist for UI work, not as transcript notes.
 
 ## Core Principle
 
-Every screen in your app has **four states** you must build: **Loading, Success, Error, Empty**. If you skip any, users will notice and assume something is broken. AI tools naturally generate the "happy path" (what the screen looks like when everything works). You must explicitly handle the other states.
+Good UI is how an app looks. Good UX is whether users understand what to do, what happened, what failed, and how to recover. AI-generated UI often covers only the happy path. Build the full experience.
 
-Good UX builds trust. Bad UX (unpredictable results, too many steps, friction) causes users to leave, and they will blame your product, not themselves.
+Every screen needs these states:
 
----
+| State | Required UX |
+|---|---|
+| Loading | Shows progress appropriate to wait time and scope |
+| Success | Confirms the user's action worked |
+| Error | Explains what happened, why, and next action |
+| Empty | Explains why nothing is there and how to start or continue |
 
-## 1. Loading States
+Good UX builds trust. Bad UX creates uncertainty, extra steps, and friction. Users leave and blame the product, not themselves.
 
-### Choosing the Right Loader
+## Required Workflow
 
-| Pattern | When to Use | Example |
-|---------|-------------|---------|
-| **Skeleton screen** | Entire page or large section of content loading | Feeds, dashboards, profile pages (Instagram, LinkedIn, YouTube style) |
-| **Progress bar** | Duration is known or predictable | File uploads, downloads, installations |
-| **Inline spinner** | Small, contained action in a specific area | Button clicked, one section refreshing |
-| **Optimistic UI** | Action is very likely to succeed | Likes, favorites, toggles, assume success instantly, roll back on failure |
+When building or reviewing a UI, do this before considering the work complete:
 
-### Spinner Timing Rules
+1. Identify every user action and async data source.
+2. Define loading, success, error, and empty states for each relevant screen or section.
+3. Pick the loader based on scope and duration.
+4. Place errors next to the thing that caused them unless the issue blocks the whole flow.
+5. Ensure every action gives visible feedback.
+6. Make each page section resilient when other sections load slowly or fail.
+7. Use familiar patterns for the user's device, locale, and audience.
+8. Reduce choice overload with grouping, curation, filtering, or progressive disclosure.
+9. Verify the final checklist at the bottom of this file.
 
-- **Under 1 second**: Show no loader at all. A spinner that flashes makes the app feel slower.
-- **1-2 seconds**: Plain spinner, no text needed.
-- **2-5 seconds**: Spinner is fine, but no text starts feeling broken past 5 seconds.
-- **5-10 seconds**: Add static text ("Loading...", "Saving...") or better, changing text ("Connecting to your account..." then "Almost there...").
-- **Past 10 seconds**: Looped animations stop working and increase frustration. Switch to a progress bar or step-by-step indicator.
-- **If it fails**: Show the error immediately. Never make users wait 20 seconds with a spinner then show an error.
+## Loading States
 
-### Skeleton Screen Rules
+Missing loaders make users think the app is broken. A blank screen with no response can lose users in 2-3 seconds. Bad loaders can also make the app feel slower.
 
-- Show the page structure/layout first as gray placeholder outlines.
-- The brain processes the layout before data arrives, making the wait feel shorter.
-- Use inline spinners inside buttons or small areas where skeletons do not make sense.
+### Choose Loader By Context
+
+| Pattern | Use When | Avoid When |
+|---|---|---|
+| Skeleton screen | Whole page or large content section loads | Small contained action |
+| Progress bar | Duration or progress is knowable | Unknown background wait |
+| Inline spinner | Button or small section is working | Whole page load |
+| Optimistic UI | Action is very likely to succeed | Failure would be costly or confusing |
+| No loader | Work finishes under 1 second | Delay may exceed 1 second |
+
+### Timing Rules
+
+| Duration | UX Rule |
+|---|---|
+| Under 1 second | Show result, no loader. Spinner flash feels slower. |
+| 1-2 seconds | Plain spinner is enough. |
+| 2-5 seconds | Spinner still works. |
+| 5-10 seconds | Add text. Prefer changing text like "Connecting..." then "Almost there...". |
+| Over 10 seconds | Replace looped spinner with progress bar or step indicator. |
+| On failure | Show error as soon as possible. Do not make users wait then fail. |
+
+### Skeleton Rules
+
+- Show page structure first as gray placeholder outlines.
+- Match final layout closely so users start processing structure before data arrives.
+- Use skeletons for feeds, dashboards, profiles, and content-heavy pages.
+- Use inline spinners for buttons or small parts where skeletons do not fit.
 
 ### Optimistic UI Rules
 
-- Update the UI immediately when the user takes an action.
-- Do not wait for server confirmation.
-- If the action fails later, roll back the change gracefully.
-- Example: Instagram heart turns red instantly on tap.
+- Update UI immediately when action is likely to succeed, like a like/favorite/toggle.
+- Do not wait for server confirmation before showing the expected result.
+- If the server fails, roll back clearly and gracefully.
+- Do not use optimistic UI for payments, destructive actions, bookings, or anything where false success creates risk.
 
----
+## Error States
 
-## 2. Error States
+Errors must reduce uncertainty. Never leave users wondering whether an action worked.
 
-### Error Message Rules
+### Error Message Formula
 
-A good error message does three things:
-1. **Tells them what happened**
-2. **Tells them why it happened**
-3. **Gives them a clear next action**
+Good error messages include all three:
 
-**Bad examples:**
-- Dumping raw database/backend error on screen (security risk + unreadable)
-- "Something went wrong" (too vague, user does not know if action succeeded)
-- Silent failure: button does nothing, no message at all (worst case)
+1. What happened.
+2. Why it happened, in user language.
+3. What the user can do next.
 
-**Good example:**
-> "Your payment didn't go through. Your card was declined. Please check your card details or try a different payment method."
+Bad:
+
+```text
+Something went wrong.
+```
+
+Good:
+
+```text
+Your payment didn't go through. Your card was declined. Check your card details or try a different payment method.
+```
+
+### Error Rules
+
+- Never dump database, backend, stack trace, or raw exception details into UI.
+- Never silently fail. A clicked button must produce feedback.
+- Avoid vague messages when user needs certainty.
+- Always provide recovery: retry, edit, request access, update payment, or contact support.
+- Show errors immediately when known. Do not hide failure behind long loading.
 
 ### Error Placement
 
-| Type | When to Use | Rules |
-|------|-------------|-------|
-| **Inline** (next to the element) | Form validation, button failures, field-specific errors | Closest to the problem. Use most often. Red border on field + message next to it. |
-| **Toast** (auto-dismissing popup) | Non-critical, recoverable messages | "Couldn't connect, retrying..." Never for important errors, user might look away and miss it. |
-| **Modal** (center screen, blocks interaction) | Critical errors that require user action | Payment failure, permission error. Must provide a way forward (button to update payment, request access). Use sparingly. |
+| Placement | Use When | Rules |
+|---|---|---|
+| Inline | Field-specific errors, button action failure, most forms | Closest to the problem. Use red border plus message. |
+| Toast | Non-critical, recoverable status | Auto-dismiss only if user can miss it without harm. Example: "Couldn't connect, retrying..." |
+| Modal | Critical blocker requiring user action | Blocks flow. Must include clear next action. Use sparingly. |
 
-### General Error Rules
+If blocking the user with a modal, provide a way forward.
 
-- The closer the error is to the element that caused it, the better.
-- Never expose backend/database details to the user.
-- Always give the user a way to recover or retry.
-- Never silently fail, the user must always know the outcome of their action.
+## Form UX
 
----
+Forms create friction. Reduce effort, uncertainty, and rework.
 
-## 3. Empty States
+### Form Rules
 
-Empty states are often the **first thing a new user sees**. Make a good impression.
+1. Disable submit until required fields are valid, but explain what is missing.
+2. Mark required fields clearly so users are never guessing why submit is disabled.
+3. Validate inline when users leave a field, not only after submit.
+4. Keep validation messages near the field, not at the top of the page.
+5. Show character counts for limited fields.
+6. Pre-fill known values, such as logged-in user's email.
+7. Show password requirements while typing and check them off live.
+8. Accept forgiving formats, such as phone numbers with spaces, dashes, parentheses, or no formatting. Normalize in code.
+9. For forms with more than seven fields, consider splitting into multiple steps or sections.
 
-### Rules for Empty States
+### Form Mistakes To Avoid
 
-1. **Never leave it blank.** A blank dashboard with no actions is a dead end.
-2. **Tell the user what the section is for** and how to start using it.
-3. **Provide a clear call-to-action.** "Create your first project" with a button.
-4. **Add guidance.** Step-by-step or gamified instructions to get them started.
-5. **For every section** without content, explain its purpose and how to populate it.
+- Disabled button with no explanation.
+- Submit, wait, then scroll to find errors.
+- Rejecting user input because formatting differs from preferred display format.
+- Making users type data the app already knows.
+- Showing all fields at once when the form feels like a wall.
+
+## Empty States
+
+Empty states are often first impressions. Do not leave blank areas or dead ends.
+
+### Empty State Rules
+
+- Explain what the area is for.
+- Explain why it is empty.
+- Provide a clear next action.
+- Add guidance, steps, or onboarding when helpful.
+- Handle every empty section, not only the page-level state.
 
 ### Empty Search Results
 
-- "No results" is fine, but "No results for **purple shoes**" with a link to retry that search is better.
-- Keep the user moving forward.
+- "No results" is acceptable but weak.
+- "No results for purple shoes" is better because it confirms the query.
+- Offer an action: clear filters, try a broader search, or search the same term elsewhere if relevant.
 
-### Goal/Success Empty States
+### Goal Empty States
 
-- When the empty state is an achievement (inbox zero, cleared tasks), celebrate it.
-- Add an animation or a visually rewarding background.
-- Make it something the user looks forward to seeing.
+When emptiness is success, celebrate it:
 
-### What a Good Empty State Does
+- Inbox zero.
+- No open tasks.
+- All steps complete.
 
-- Tells the user **why** it is empty.
-- Shows them **what to do next**.
-- Does **not feel broken**.
+Use subtle delight, animation, or visual reward so the state feels achieved, not broken.
 
----
+## Partial Loading And Graceful Degradation
 
-## 4. Success States
-
-Success states are taken for granted when present, but very noticeable when missing. When a user completes an action, they need to know it worked.
+Pages are made of sections backed by different data sources. Each section should load, fail, and recover independently.
 
 ### Rules
 
-- **Always give feedback.** Button clicked, payment submitted, photo liked, the user must know it succeeded.
-- **Match the response to the action.** A like is instant and subtle. A payment is important and needs clear confirmation.
-- **Do not overdo it.** Not every success needs confetti or a full-page celebration. Use big celebrations for milestones (first project, completed task), not for every button click.
-- **Sometimes the action itself is the confirmation.** Moving a card from "to do" to "done" on a board, it stays in "done". The state change is the feedback. No extra message needed.
-- **Never leave the user guessing.** "I clicked confirm and nothing happened" is one of the worst feelings. Did it work? Should I click again? Always close the loop.
-
-### What NOT to Do
-
-- Do not show nothing after a critical action (payment, submission, booking).
-- Do not over-celebrate trivial actions (toggling a setting, liking a post).
-- Do not use a full-page success screen for something that could be a subtle inline confirmation.
-
----
-
-## 5. Forms
-
-Nobody likes filling out forms. Reduce friction with these rules:
-
-1. **Disable submit until all required fields are valid.** Keep the button grayed out. But make it obvious what is missing, a grayed-out button with no explanation is worse.
-2. **Validate inline.** The moment a user leaves a field (on blur), validate it. Never make them fill out the whole form, submit, then scroll up to find the error.
-3. **Show character count.** If a field has a limit, show remaining characters as they type.
-4. **Pre-fill what you can.** If the user is logged in, do not make them type their email again.
-5. **Show password requirements as they type.** Check off each requirement in real-time (capital letter, number, length).
-6. **Be forgiving with formatting.** Phone numbers with dashes, parentheses, spaces, or nothing at all, handle all formats and normalize on the backend.
-
----
-
-## 6. Partial Loading / Graceful Degradation
-
-Different parts of a page load at different speeds. They come from different servers, different APIs.
-
-### Rules
-
-- **Load what is available.** Do not wait for everything to be ready. Show the page as sections arrive.
-- **Each section is independent.** Every section manages its own data, loading state, and error state.
-- **If one section fails, the rest still work.** The page does not go down because one component broke.
-- **Show cached content while fresh data loads.** Display a cached version from earlier, then swap in fresh data when ready. The user never notices the trick.
+- Load what is available instead of waiting for everything.
+- Give each section its own loading state, error state, and retry action.
+- If one section fails, keep the rest of the page usable.
+- Show cached content while fresh data loads when available.
+- Think through mixed states: some sections loaded, some loading, some failed, some stale.
 
 ### Implementation Pattern
 
-```
+```text
 Page
-├── Profile Section    → own fetch, own loader, own error
-├── Feed Section       → own fetch, own loader, own error
-├── Sidebar Section    → own fetch, own loader, own error
-└── Charts Section     → own fetch, own loader, own error
+|-- Profile section: own data, loader, error, retry
+|-- Feed section: own data, loader, error, retry
+|-- Sidebar section: own data, loader, error, retry
+`-- Charts section: own data, loader, error, retry
 ```
 
-Each section:
-- Shows its own skeleton/spinner while loading.
-- Displays its own error + retry button if it fails.
-- The rest of the page remains fully usable.
+### Avoid
 
-### What NOT to Do
+- Full-page loading screen until every component is ready.
+- Full-page error because one API call failed.
+- One failed section taking down the whole page.
+- Hiding cached or stale-but-useful content during refresh.
 
-- Do not show a full-page loading screen until every component is ready.
-- Do not show a full-page error if one thing breaks.
-- Do not let one failed API call take down the entire page.
+## Success States
 
----
+Users need to know their action worked. Missing success feedback creates anxiety and repeated actions.
 
-## 8. Jakob's Law (Familiarity)
+### Success Feedback Rules
 
-Users spend most of their time on other websites and apps. They already expect your site to work the same as others. Predictable structure lets users focus on what actually matters, not on figuring out where things are.
+- Always close the loop after user action.
+- Match feedback intensity to importance.
+- Use subtle feedback for small actions like likes, toggles, or saved settings.
+- Use clear confirmation for high-stakes actions like payment, booking, or submission.
+- Use celebration for milestones like first project, major task completion, or achievement.
+- Sometimes the changed state is confirmation, like a card moving from "To do" to "Done" and staying there.
+
+### Avoid
+
+- No feedback after critical action.
+- Over-celebrating routine actions.
+- Full-page success for actions that only need inline confirmation.
+- Leaving users unsure whether they should click again.
+
+## Familiar Patterns And Jakob's Law
+
+Users spend most of their time in other apps. They expect yours to follow patterns they already know. Predictable structure lets users focus on their goal instead of relearning basics.
 
 ### Rules
 
-- **Standardize placement of common components for the user's context.** On desktop web, shopping carts often go top right. On mobile, important actions often move near the bottom because thumbs reach there more easily. In right-to-left locales, layouts may mirror, so carts can appear top left.
-- **Being "innovative" with standard placements creates unnecessary friction.** Moving the cart to the bottom left might feel creative, but the user now has to think about where it is. That microsecond of confusion is avoidable.
-- **Predictable does not mean boring.** The layout and structure can be familiar while the visual design is unique. Let the user focus on your product, not on finding the cart.
-- **When in doubt, follow the pattern for that device, locale, and audience.** If every major app in the user's context does something a certain way, there is a reason. Users have built habits around those patterns.
+- Standardize placement for common components: navigation, search, cart, checkout, form patterns, account controls.
+- Apply standards for the user's context, not a generic desktop default.
+- Desktop web patterns differ from mobile patterns.
+- Mobile layouts must account for thumb reach. Important actions often belong near the bottom.
+- Locale matters. Right-to-left experiences may mirror placement, such as cart moving from top right to top left.
+- Audience and market norms matter. Follow the pattern users in that context already know.
+- Keep structure familiar while making visual design distinct.
 
-### What to Standardize vs. Where to Be Creative
+### Standardize Vs Customize
 
-| Standardize (zero friction) | Creative freedom |
+| Standardize | Customize |
 |---|---|
-| Navigation placement | Visual design, colors, typography |
-| Cart/checkout flow | Content, copy, imagery |
-| Form layouts | Animations, transitions |
-| Search placement | Feature-specific interactions |
+| Navigation placement | Brand color and typography |
+| Cart and checkout flow | Illustration style |
+| Search placement | Motion and microinteractions |
+| Form layout conventions | Tone and copy |
+| Error/success placement | Visual personality |
 
----
+Creative placement of common controls creates friction. Creative styling of familiar structure creates personality without confusion.
 
-## 9. Hick's Law (Choice Complexity)
+## Hick's Law And Choice Complexity
 
-Decision time increases as the number and complexity of choices increase. Users can do more when choices are organized into manageable groups instead of shown all at once.
+Decision time increases as choices increase in number and complexity. Good UX keeps visible options manageable without removing capability.
 
 ### Rules
 
-- **Prioritize one clear primary action.** Google focuses attention on search. Yahoo-style clutter creates competing choices and slows users down.
-- **Break up long forms.** If a form has more than seven fields, consider a multi-step flow so users focus on one manageable group at a time.
-- **Curate before showing everything.** Do not list every menu item, product, movie, or filter at once. Show useful defaults, recommendations, or categories first.
-- **Let users narrow choices.** Search, filters, categories, and progressive disclosure keep options available without overwhelming the first screen.
-- **Do not remove power, reduce overload.** The goal is not to limit what users can do. The goal is to keep visible choices manageable.
+- Prioritize one clear primary action per screen or step.
+- Reduce competing calls to action.
+- Group related options.
+- Curate defaults or recommendations instead of showing everything.
+- Use filters, search, and categories to help users narrow options.
+- Use progressive disclosure: show the next useful choice when it becomes relevant.
+- Break large forms into pages, steps, or sections when field count and complexity become overwhelming.
+- Consider multi-step forms when there are more than seven fields.
 
-### What NOT to Do
+### Examples
 
-- Do not show every possible option on the first screen.
-- Do not make secondary actions compete visually with the primary action.
-- Do not present a long form as one dense wall when steps or sections would reduce friction.
-- Do not hide necessary options so deeply that users cannot recover them.
+- Google focuses the homepage on one action: search.
+- Cluttered portals create unnecessary competing choices.
+- Netflix has thousands of titles but shows curated rows and recommendations first.
+- A long menu can show key options first, then let users search, filter, or expand.
 
----
+### Avoid
 
-## 10. General UX Rules for AI-Generated Code
+- Showing every option on the first screen.
+- Making secondary actions compete with the primary action.
+- Hiding needed options so deeply users cannot recover them.
+- Treating choice reduction as removing power. It should reduce overload while preserving access.
 
-When building with AI tools or generating code, explicitly request:
+## Quick Decision Tables
 
-1. **All four states** for every screen: loading, success, error, empty.
-2. **Error messages** that are human-readable, explain what/why, and give an action.
-3. **No silent failures**, every user action must have a visible outcome.
-4. **Loading indicators** appropriate to the duration and context.
-5. **Form validation** inline, with clear feedback on what is missing.
-6. **Graceful degradation**, independent sections that do not take each other down.
-7. **Empty states** with guidance, not blank screens.
-8. **Pre-filling** user data where possible.
-9. **Forgiving input formats**, normalize on the backend, not the user.
-10. **Accessible error placement**, errors close to the element, not at the top of the page.
-11. **Familiar placement by context**, adapting common patterns for desktop, mobile, locale, and audience.
-12. **Manageable choices**, reducing choice overload through grouping, curation, filtering, and progressive disclosure.
+### Loader Choice
 
----
+| Situation | Use |
+|---|---|
+| Whole page or feed loading | Skeleton |
+| File upload/download/install | Progress bar |
+| Button click or small section refresh | Inline spinner |
+| Like, favorite, low-risk toggle | Optimistic UI |
+| Under 1 second | No loader |
 
-## Quick Checklist
+### Error Placement
 
-Before shipping any screen, verify:
+| Situation | Use |
+|---|---|
+| Invalid field | Inline field error |
+| Button action failed | Inline near button |
+| Non-critical background issue | Toast |
+| Payment, permission, or blocker | Modal with action |
 
-- [ ] Loading state: skeleton, spinner, or progress bar as appropriate
-- [ ] Success state: clear confirmation of the action
-- [ ] Error state: human-readable message with what/why/action
-- [ ] Empty state: explanation + call-to-action
-- [ ] No silent failures
-- [ ] Forms: inline validation, disabled submit until valid, pre-fill where possible
-- [ ] Partial loading: sections load independently, failures are isolated
-- [ ] Spinner timing: no spinner for <1s, text after 5s, progress bar after 10s
-- [ ] Error placement: inline for forms/toasts for minor/modal for critical
-- [ ] Jakob's Law: standard placement for common components by device, locale, and audience
-- [ ] Hick's Law: primary action is clear, choices are grouped/curated, long forms are split when needed
+### Success Feedback
+
+| Action | Feedback |
+|---|---|
+| Like/favorite/toggle | Immediate visual state change |
+| Save setting | Inline saved status or subtle toast |
+| Payment/booking/submission | Clear confirmation or receipt |
+| Milestone/first completion | Celebration or dedicated success state |
+
+## Common Mistakes
+
+| Mistake | Fix |
+|---|---|
+| Building only happy path | Define loading, success, error, and empty states first |
+| Blank screen while loading | Show skeleton or section-level loading |
+| Spinner flashes under 1 second | Show result directly |
+| Infinite spinner over 10 seconds | Use progress or step indicator |
+| "Something went wrong" | Explain what happened, why, and next action |
+| Raw backend error shown | Map to user-safe message |
+| Toast for critical error | Use inline or modal depending on blocker |
+| Disabled submit with no clue | Mark required fields and explain missing input |
+| Full-page error for one failed card | Isolate section failure and keep rest usable |
+| No confirmation after action | Add feedback matched to action importance |
+| Desktop pattern copied to mobile | Adapt to device reach and mobile norms |
+| All options shown at once | Group, curate, filter, or disclose progressively |
+
+## Final UX Checklist
+
+Before shipping any UI, verify:
+
+- [ ] UI and UX both considered: visual design plus understandable behavior.
+- [ ] Loading state exists for every async page, section, and action.
+- [ ] Loader type matches scope and duration.
+- [ ] No spinner appears for work under 1 second.
+- [ ] Text appears for waits over 5 seconds.
+- [ ] Progress or steps appear for waits over 10 seconds.
+- [ ] Success state confirms every user action.
+- [ ] Error messages explain what happened, why, and next action.
+- [ ] No raw backend/database/stack errors are exposed.
+- [ ] No silent failures.
+- [ ] Errors are placed near the cause, unless they block the whole flow.
+- [ ] Empty states explain purpose, reason, and next action.
+- [ ] Search empty states mention the query and offer recovery.
+- [ ] Achievement empty states feel rewarding.
+- [ ] Forms mark required fields and show what is missing.
+- [ ] Forms validate inline and keep errors near fields.
+- [ ] Forms pre-fill known data where possible.
+- [ ] Inputs accept forgiving formats and normalize internally.
+- [ ] Long or complex forms are grouped or split when needed.
+- [ ] Page sections load and fail independently.
+- [ ] Cached content is shown during refresh when available.
+- [ ] Familiar patterns match device, locale, audience, and market norms.
+- [ ] Common controls are standardized; brand expression stays in styling.
+- [ ] Primary action is clear.
+- [ ] Choices are grouped, curated, filtered, or progressively disclosed.

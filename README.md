@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">Build For Good UX</h1>
-  <p align="center">An agent skill for building UIs with proper loading states, spinner timing, error handling and placement, success states, empty states, form UX, graceful degradation, familiar patterns, and manageable choices.</p>
+  <p align="center">An agent skill for building UIs that handle loading, success, error, empty, partial, familiar-pattern, and choice-heavy states with good UX.</p>
 </p>
 
 <p align="center">
@@ -17,6 +17,7 @@ Based on the **Build For Good UX** video series by [Katherine Gilligan](https://
 
 | | Topic | Details |
 |---|---|---|
+| 🎨 | **UI vs UX** | Beautiful interface plus understandable behavior, recovery, and trust |
 | ⬜ | **Loading States** | Skeleton screens, progress bars, spinners, optimistic UI |
 | ⏳ | **Spinner Timing** | When to show what based on duration (<1s, 1-10s, >10s) |
 | ⚠️ | **Error States** | Message quality, placement (inline, toast, modal) |
@@ -24,8 +25,8 @@ Based on the **Build For Good UX** video series by [Katherine Gilligan](https://
 | 🌵 | **Empty States** | First impressions, search results, goal/achievement states |
 | 📄 | **Form UX** | Inline validation, pre-filling, character counts, forgiving formats |
 | 🧩 | **Graceful Degradation** | Independent sections, cached content, partial loading |
-| 🧭 | **Jakob's Law** | Familiar patterns by device and locale, zero friction on common actions |
-| 🫙 | **Hick's Law** | Reduce decision complexity, break up long forms, curate choices |
+| 🧭 | **Jakob's Law** | Familiar patterns by device, locale, audience, and market |
+| 🫙 | **Hick's Law** | Reduce decision complexity with grouping, filtering, curation, progressive disclosure |
 
 ## Installation
 
