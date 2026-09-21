@@ -1,0 +1,44 @@
+{
+  "skill_name": "build-for-good-ux",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review and implement a multi-section analytics dashboard component in React that fetches metrics, recent activity, and usage charts from separate endpoints. The implementation must handle loading, partial failures, empty states, and cached data during background refreshes.",
+      "expected_output": "A dashboard component architecture implementing independent section-level loading (skeletons/spinners scaled to scope), error states with retry buttons that isolate failures without crashing the entire page, empty states with actionable guidance, and background revalidation that keeps existing cached data visible.",
+      "files": [],
+      "expectations": [
+        "Each section (metrics, recent activity, charts) loads independently without blocking other sections.",
+        "Uses skeleton loaders or scoped indicators appropriate for large content sections rather than a single full-page spinner.",
+        "Partial section failure renders isolated error state with retry action near failed section while other sections remain visible.",
+        "Empty activity or metric states explain why nothing is present and provide a clear recovery or setup action.",
+        "Shows cached content during background refresh rather than blanking out the UI."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create an onboarding registration form with client-side and server-side validation. Address disabled submit button traps, inline error placement, required field clarity, and error jump behavior.",
+      "expected_output": "A complete form component that avoids disabling submit when users need to discover invalid inputs, places errors directly adjacent to invalid inputs, automatically focuses and scrolls to the first invalid field on submission, and provides clear inline feedback across button states (focus, hover, loading, pressed).",
+      "files": [],
+      "expectations": [
+        "Does not permanently disable the submit button without explanation; keeps button enabled or accessible so users can trigger validation and discover errors.",
+        "Submitting an incomplete or invalid form automatically moves focus and scrolls to the first invalid field.",
+        "Validation errors are placed inline directly next to the fields that caused them.",
+        "Submit button includes scoped inline loading indicator and handles all interaction states (default, hover, focus, pressed, loading).",
+        "Accepts forgiving input formats and normalizes values internally (Tesler's Law)."
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Design a mobile checkout payment and shipping method selector with dozens of options. Address Fitts's Law touch targets, gesture conflict between scrolling and card taps, and Hick's Law choice overload.",
+      "expected_output": "A mobile selection flow featuring minimum 44px/48px touch targets with invisible hit padding, gesture disambiguation between vertical scroll gestures and card tap selections, and curated/categorized options using progressive disclosure or smart defaults to eliminate choice overload.",
+      "files": [],
+      "expectations": [
+        "Applies Fitts's Law by ensuring interactive tap targets meet minimum sizing (e.g. 44x44px or 48x48px) with invisible hit padding.",
+        "Resolves gesture conflict so dragging or scrolling the container does not accidentally trigger card selection taps.",
+        "Reduces choice overload (Hick's Law) by grouping, curating, or using progressive disclosure instead of presenting flat sprawling lists.",
+        "Places primary action buttons within comfortable thumb reach zone on mobile screens.",
+        "Provides instant pressed/tactile feedback on selection to prevent duplicate spam taps."
+      ]
+    }
+  ]
+}

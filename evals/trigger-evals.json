@@ -1,0 +1,82 @@
+[
+  {
+    "query": "Review this user profile settings screen and make sure we have loading, error, empty, and success states for saving information.",
+    "should_trigger": true
+  },
+  {
+    "query": "Our checkout submit button is disabled when the form is invalid, but users can't figure out why. How should we handle form validation and recovery UX?",
+    "should_trigger": true
+  },
+  {
+    "query": "Build a multi-section project dashboard in Next.js where each card fetches data independently and fails gracefully with retry actions without breaking the whole page.",
+    "should_trigger": true
+  },
+  {
+    "query": "On our mobile web app, users keep accidentally tapping product cards when trying to scroll down the list. How do we arbitrate touch gestures and size the hit areas properly?",
+    "should_trigger": true
+  },
+  {
+    "query": "We have 40 shipping filter options overwhelming users on our product catalog. How can we apply progressive disclosure and reduce choice overload?",
+    "should_trigger": true
+  },
+  {
+    "query": "Improve the UX of our file upload flow: show progress for long uploads, handle connection drop errors, and display clear empty states before files are dragged in.",
+    "should_trigger": true
+  },
+  {
+    "query": "Audit our primary button component styles to ensure it supports all required states: default, hover, focus, pressed, loading, and accessible disabled interaction.",
+    "should_trigger": true
+  },
+  {
+    "query": "When search returns zero results in our SaaS app, what should the empty state UI include to help users recover instead of just saying 'No items found'?",
+    "should_trigger": true
+  },
+  {
+    "query": "Implement an onboarding multi-step form following Tesler's Law to absorb phone and postal code input formatting complexity in code rather than burdening the user.",
+    "should_trigger": true
+  },
+  {
+    "query": "Audit our mobile navigation and primary floating action buttons for Fitts's Law touch target ergonomics and thumb zone accessibility.",
+    "should_trigger": true
+  },
+  {
+    "query": "Add a React custom hook `useDebounce` to throttle input value state updates before triggering parent component re-renders.",
+    "should_trigger": false
+  },
+  {
+    "query": "Configure Jest and React Testing Library to mock window.matchMedia and test CSS media queries.",
+    "should_trigger": false
+  },
+  {
+    "query": "Set up Tailwind CSS typography plugin and configure custom font family variables in tailwind.config.js.",
+    "should_trigger": false
+  },
+  {
+    "query": "Optimize web fonts loading in Next.js using next/font to prevent cumulative layout shift (CLS).",
+    "should_trigger": false
+  },
+  {
+    "query": "Implement an Axios interceptor to automatically refresh expired JWT auth tokens on 401 response codes.",
+    "should_trigger": false
+  },
+  {
+    "query": "Write a Zod schema to parse and validate incoming webhook payload JSON objects on the server.",
+    "should_trigger": false
+  },
+  {
+    "query": "Configure webpack bundle analyzer and split chunks plugin to optimize vendor bundle sizes in our single page application.",
+    "should_trigger": false
+  },
+  {
+    "query": "Set up Playwright end-to-end tests to verify cross-browser cookie persistence across navigation routes.",
+    "should_trigger": false
+  },
+  {
+    "query": "Convert an existing SVG icon set into standalone TypeScript React components with SVGR.",
+    "should_trigger": false
+  },
+  {
+    "query": "Fix a React hydration mismatch warning caused by rendering server-side timestamps in client local time.",
+    "should_trigger": false
+  }
+]

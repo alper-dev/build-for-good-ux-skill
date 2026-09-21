@@ -1,6 +1,6 @@
 ---
 name: build-for-good-ux
-description: Use when building, reviewing, or improving user-facing UI, frontend components, pages, forms, flows, loading states, error handling, empty states, success feedback, graceful degradation, familiar layouts, or choice-heavy interfaces.
+description: Audit, build, or refactor frontend UI components, pages, forms, and interactive flows to implement complete UX states (loading, success, error, empty), resilient async degradation, accessible button interactions, error recovery, Fitts's Law mobile touch targets, and choice simplification. Use when creating or reviewing user-facing interfaces, form validations, multi-section dashboards, checkout flows, or gesture-sensitive mobile screens.
 ---
 
 # Build For Good UX
@@ -28,13 +28,16 @@ When building or reviewing a UI, do this before considering the work complete:
 
 1. Identify every user action and async data source.
 2. Define loading, success, error, and empty states for each relevant screen or section.
-3. Pick the loader based on scope and duration.
+3. Pick the loader based on scope and duration; place loaders inside action buttons when scoped to that trigger.
 4. Place errors next to the thing that caused them unless the issue blocks the whole flow.
-5. Ensure every action gives visible feedback.
-6. Make each page section resilient when other sections load slowly or fail.
-7. Use familiar patterns for the user's device, locale, and audience.
-8. Reduce choice overload with grouping, curation, filtering, or progressive disclosure.
-9. Verify the final checklist at the bottom of this file.
+5. Ensure every action gives visible or tactile feedback across all button states (default, hover, focus, pressed, loading, disabled; see [Button States And Accessibility](#button-states-and-accessibility)).
+6. Decide whether to keep submit enabled with focused error jump instead of disabled button traps.
+7. Make each page section resilient when other sections load slowly or fail.
+8. Apply Tesler's Law: absorb complexity in code and system design rather than offloading it to users.
+9. Use familiar patterns for the user's device, locale, and audience (Jakob's Law).
+10. Respect Fitts's Law: optimize tap target sizes, invisible hit padding, thumb reach, and resolve scroll-vs-tap gesture conflicts.
+11. Reduce choice overload with grouping, curation, filtering, or progressive disclosure without hiding core discoverability.
+12. Verify the final checklist at the bottom of this file.
 
 ## Loading States
 
@@ -123,8 +126,8 @@ Forms create friction. Reduce effort, uncertainty, and rework.
 
 ### Form Rules
 
-1. Disable submit until required fields are valid, but explain what is missing.
-2. Mark required fields clearly so users are never guessing why submit is disabled.
+1. Apply the disabled-button decision rule below; default to keeping submit enabled.
+2. Mark required fields clearly so users are never guessing why submit cannot proceed.
 3. Validate inline when users leave a field, not only after submit.
 4. Keep validation messages near the field, not at the top of the page.
 5. Show character counts for limited fields.
@@ -133,9 +136,30 @@ Forms create friction. Reduce effort, uncertainty, and rework.
 8. Accept forgiving formats, such as phone numbers with spaces, dashes, parentheses, or no formatting. Normalize in code.
 9. For forms with more than seven fields, consider splitting into multiple steps or sections.
 
+### Disabled-Button Decision Rule And Recovery
+
+Disabled buttons hide the path forward and break keyboard/screen-reader navigation.
+
+- **The Test**: If disabled, will user have to figure out how to enable it, or is the reason super obvious? If not super obvious, **do not disable**.
+- **When to disable**:
+  - Waiting on async response after press (prevents duplicate submissions).
+  - Obvious navigation boundary (e.g., "Previous" on page 1 of wizard).
+  - Minimal surveys with single required field directly in view.
+- **When to keep enabled (form submit)**:
+  - Multi-field forms or forms with mixed required/optional inputs.
+  - Form validation errors scattered across long scroll.
+- **Active Recovery Pattern**:
+  - User taps enabled submit with incomplete fields.
+  - Show clear error summary message.
+  - Visually highlight missing/invalid fields.
+  - Scroll and move focus directly to first missing field so user does not hunt.
+- **Accessibility Risk**:
+  - For actions that are truly unavailable, native `disabled` is appropriate; it cannot receive focus and is unavailable to keyboard tab navigation.
+  - When keyboard discoverability matters, use `aria-disabled="true"` instead of `disabled`, suppress pointer and keyboard activation handlers, and provide a clear visible explanation (e.g., tooltip, descriptive text, or `aria-describedby`).
+
 ### Form Mistakes To Avoid
 
-- Disabled button with no explanation.
+- Disabled button with no explanation or obvious trigger.
 - Submit, wait, then scroll to find errors.
 - Rejecting user input because formatting differs from preferred display format.
 - Making users type data the app already knows.
@@ -218,6 +242,65 @@ Users need to know their action worked. Missing success feedback creates anxiety
 - Full-page success for actions that only need inline confirmation.
 - Leaving users unsure whether they should click again.
 
+## Button States And Accessibility
+
+Buttons require distinct visual and tactile signals across their full lifecycle. Missing states make interfaces feel unresponsive or broken.
+
+### The Six Button States
+
+| State | Purpose & Appearance | Implementation Rules |
+|---|---|---|
+| **Default** | Indicates affordance to press | Solid fill, clear outline, or subtle drop shadow for depth. |
+| **Hover** | Signals cursor interactivity | Color or border shift under cursor. **Desktop-only**: do not trigger sticky hover styles on mobile touch devices. |
+| **Focus** | Critical for accessibility (keyboard / screen reader) | High-contrast outline or focus ring when tabbing. Never remove outline without accessible replacement. |
+| **Pressed** | Instant acknowledgment of tap/click | Darken color, inward press animation, or mobile tactile/haptic buzz/ripple. Prevents repeated spam clicks. |
+| **Loading** | Confirms background processing | Loader inside the button keeps context where user is looking without full-page disruption. |
+| **Disabled** | Signals unavailable action | Faded appearance. Follow disabled-button decision rule to prevent accessibility traps. |
+
+### Button Rules
+
+- Always provide immediate pressed feedback. Lack of instant visual or haptic feedback causes users to hit buttons repeatedly assuming frozen UI.
+- Scoped loading belongs directly inside the trigger button rather than an intrusive screen-wide takeover.
+- Avoid sticky hover states on touchscreens. Touch interfaces lack hover cursors; simulate tap responses cleanly.
+- Keyboard focus outlines must remain visible and legible across all themes.
+
+## Tesler's Law (Conservation of Complexity)
+
+Larry Tesler formulated that every system has an inherent amount of complexity that cannot be eliminated. You can only decide who bears the burden: the software builder or the user.
+
+> "If a million users each waste a minute on a complexity that an engineer could have solved within a week's time, you are penalizing the user to make the engineer's job easier."
+
+### Principles
+
+- Real users are distracted, busy, and seek the path of least resistance. Do not design for ideal, patient users.
+- Shift complexity into engineering and design phases:
+  - Automate timestamps and cue points (e.g., Netflix "Skip Intro" detection).
+  - Reduce multi-step checkout to biometric/tokenized authentication (e.g., Apple Pay with Face ID).
+  - Parse and normalize messy user inputs automatically instead of forcing strict regex formats.
+  - Anticipate defaults and route around manual repetitive steps.
+- Prioritize developer effort over user penalty whenever complexity can be resolved in code.
+
+## Fitts's Law, Tap Targets, And Gesture Conflicts
+
+Fitts's Law states that the time required to rapidly move to a target area is a function of the ratio between distance to target and width of target. Larger targets and targets closer to the user's input position (thumb reach) are faster and easier to hit.
+
+### Tap Targets And Invisible Padding
+
+- Keep interactive icons spaced far enough apart to prevent accidental mis-taps (e.g., adjacent like, comment, share controls).
+- Visual size does not equal tap size. Expand clickable area using invisible padding (hit slop) around small icons without bloating visual design.
+- Expand hit zones across parent containers where applicable: make labels clickable alongside checkboxes; make whole cards clickable if directing to single destination.
+
+### Thumb Zone And Mobile Placement
+
+- Position high-frequency controls near bottom of screen where user thumbs rest naturally.
+- Primary navigation and key action bars belong within easy one-handed reach.
+
+### Resolving Gesture Conflicts
+
+- Large clickable cards or list rows must discriminate between scroll gestures and tap activations.
+- If swiping or scrolling triggers an accidental tap navigation, touch sensitivity and gesture arbitration require adjustment.
+- Test physical devices directly: if testers miss adjacent buttons or trigger unexpected actions while scrolling, refine tap padding and gesture handling.
+
 ## Familiar Patterns And Jakob's Law
 
 Users spend most of their time in other apps. They expect yours to follow patterns they already know. Predictable structure lets users focus on their goal instead of relearning basics.
@@ -244,6 +327,25 @@ Users spend most of their time in other apps. They expect yours to follow patter
 
 Creative placement of common controls creates friction. Creative styling of familiar structure creates personality without confusion.
 
+## Progressive Disclosure And Discoverability
+
+Progressive disclosure presents users with only the information and actions needed right now, revealing deeper layers as users advance through tasks.
+
+### Core Mechanics
+
+- Show next steps and relevant option layers as user progresses (like GPS giving turn-by-turn guidance rather than 35 turns upfront).
+- Keep core surface uncluttered without deleting advanced capabilities.
+- Contextual revelation:
+  - On-demand AI chat / assistant tools.
+  - Triggered command palettes or menus (e.g., Notion slash command exposing block options).
+  - Collapsible detail views and step-by-step disclosures.
+
+### Discoverability Caveat
+
+- **Never hide primary or high-value features so deeply that users need a tutorial to find them.**
+- Avoid deep scrolling drop-downs where key capabilities sit below the fold unnoticed (e.g., specialized video/motion creation buried under standard image/video drop-downs).
+- Always ask: "Does the user need this right now, or is it cluttering their primary task?" Ensure core intent remains immediately discoverable.
+
 ## Hick's Law And Choice Complexity
 
 Decision time increases as choices increase in number and complexity. Good UX keeps visible options manageable without removing capability.
@@ -256,8 +358,7 @@ Decision time increases as choices increase in number and complexity. Good UX ke
 - Curate defaults or recommendations instead of showing everything.
 - Use filters, search, and categories to help users narrow options.
 - Use progressive disclosure: show the next useful choice when it becomes relevant.
-- Break large forms into pages, steps, or sections when field count and complexity become overwhelming.
-- Consider multi-step forms when there are more than seven fields.
+- Break large forms into pages, steps, or sections when field count and complexity become overwhelming (see form rule on splitting forms with more than seven fields in [Form UX](#form-ux)).
 
 ### Examples
 
@@ -281,7 +382,7 @@ Decision time increases as choices increase in number and complexity. Good UX ke
 |---|---|
 | Whole page or feed loading | Skeleton |
 | File upload/download/install | Progress bar |
-| Button click or small section refresh | Inline spinner |
+| Button click or small section refresh | Inline spinner (inside trigger button) |
 | Like, favorite, low-risk toggle | Optimistic UI |
 | Under 1 second | No loader |
 
@@ -290,6 +391,7 @@ Decision time increases as choices increase in number and complexity. Good UX ke
 | Situation | Use |
 |---|---|
 | Invalid field | Inline field error |
+| Incomplete form submission attempt | Summary message plus auto-focus/scroll to first invalid input |
 | Button action failed | Inline near button |
 | Non-critical background issue | Toast |
 | Payment, permission, or blocker | Modal with action |
@@ -303,6 +405,15 @@ Decision time increases as choices increase in number and complexity. Good UX ke
 | Payment/booking/submission | Clear confirmation or receipt |
 | Milestone/first completion | Celebration or dedicated success state |
 
+### Button Disabled vs Enabled Rule
+
+| Situation | Decision | Behavior |
+|---|---|---|
+| Active async request | Disable button | Prevents duplicate submissions and indicates processing |
+| Boundary navigation (first page "Previous") | Disable button | Reason is completely obvious and requires no user guesswork |
+| Single-field simple prompt | Disable button | Blocker is directly in front of the user |
+| Multi-field form or scattered inputs | Keep enabled | Clicking triggers inline errors, field highlights, and focus jump to first missing field |
+
 ## Common Mistakes
 
 | Mistake | Fix |
@@ -314,10 +425,17 @@ Decision time increases as choices increase in number and complexity. Good UX ke
 | "Something went wrong" | Explain what happened, why, and next action |
 | Raw backend error shown | Map to user-safe message |
 | Toast for critical error | Use inline or modal depending on blocker |
-| Disabled submit with no clue | Mark required fields and explain missing input |
+| Disabled submit with no clue | Apply disabled-button decision rule; if kept enabled, show errors and move focus to first invalid field |
 | Full-page error for one failed card | Isolate section failure and keep rest usable |
 | No confirmation after action | Add feedback matched to action importance |
-| Desktop pattern copied to mobile | Adapt to device reach and mobile norms |
+| Missing button pressed feedback | Give instant visual or haptic feedback to prevent spam clicking |
+| Sticky hover on mobile | Restrict hover styles to desktop pointer devices |
+| Keyboard focus outline removed | Retain visible focus ring across all themes |
+| Offloading complexity to user | Apply Tesler's Law: solve complexity in code and system design |
+| Tiny or crowded tap targets | Expand hit area with invisible padding; space icons apart (Fitts's Law) |
+| Scrolling triggers card clicks | Separate scroll gesture detection from tap activation |
+| Desktop pattern copied to mobile | Adapt to device reach and mobile thumb zone |
+| Progressive disclosure buries key tools | Keep core features visible; do not force users into tutorials |
 | All options shown at once | Group, curate, filter, or disclose progressively |
 
 ## Final UX Checklist
@@ -326,7 +444,7 @@ Before shipping any UI, verify:
 
 - [ ] UI and UX both considered: visual design plus understandable behavior.
 - [ ] Loading state exists for every async page, section, and action.
-- [ ] Loader type matches scope and duration.
+- [ ] Loader type matches scope and duration (inline loaders live inside action buttons).
 - [ ] No spinner appears for work under 1 second.
 - [ ] Text appears for waits over 5 seconds.
 - [ ] Progress or steps appear for waits over 10 seconds.
@@ -335,6 +453,16 @@ Before shipping any UI, verify:
 - [ ] No raw backend/database/stack errors are exposed.
 - [ ] No silent failures.
 - [ ] Errors are placed near the cause, unless they block the whole flow.
+- [ ] Button states supported: default, hover (desktop only), focus, pressed, loading, and disabled.
+- [ ] Instant pressed feedback provided (visual or haptic) to avoid duplicate spam clicks.
+- [ ] Focus outlines remain clear and accessible for keyboard and screen-reader navigation.
+- [ ] Disabled-button decision rule applied: do not disable if user must guess why; keep enabled and focus missing fields.
+- [ ] Incomplete-form submissions scroll and move focus directly to the first invalid field.
+- [ ] Disabled or blocked buttons preserve accessibility and discoverability: when keyboard discovery matters, use `aria-disabled="true"`, suppress activation handlers, and explain why action is blocked.
+- [ ] Tesler's Law applied: engineering absorbs complexity (auto-detection, input normalization, 1-tap checkout) instead of penalizing users.
+- [ ] Fitts's Law applied: tap targets are adequately sized, small icons use invisible padding, and key actions fit thumb reach.
+- [ ] Gesture arbitration works: scrolling does not trigger unintended taps on clickable cards.
+- [ ] Progressive disclosure balances clean UI without hiding critical features behind tutorials or deep menus.
 - [ ] Empty states explain purpose, reason, and next action.
 - [ ] Search empty states mention the query and offer recovery.
 - [ ] Achievement empty states feel rewarding.
